@@ -19,7 +19,7 @@ public class PostController {
 
     @GetMapping("/admin/posts")
     public String posts(Model model) {
-        List<PostDto> posts = postService.getAllPosts();
+        List<PostDto> posts = postService.findAllPosts();
         model.addAttribute("posts", posts);
         return "admin/posts";
     }
