@@ -50,4 +50,10 @@ public class PostServiceImpl implements PostService {
     public void deletePost(Long postId) {
         postRepository.deleteById(postId);
     }
+
+    @Override
+    public PostDto findPostByUrl(String postUrl) {
+        Post post = postRepository.findByUrl(postUrl).get();
+        return PostMapper.mapToPostDto(post);
+    }
 }
