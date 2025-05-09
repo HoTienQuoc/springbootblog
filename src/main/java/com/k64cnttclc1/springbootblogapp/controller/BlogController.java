@@ -1,5 +1,6 @@
 package com.k64cnttclc1.springbootblogapp.controller;
 
+import com.k64cnttclc1.springbootblogapp.dto.CommentDto;
 import com.k64cnttclc1.springbootblogapp.dto.PostDto;
 import com.k64cnttclc1.springbootblogapp.service.PostService;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,8 @@ public class BlogController {
     @GetMapping("/post/{postUrl}")
     private String showPost(@PathVariable("postUrl") String postUrl, Model model) {
         PostDto postDto = postService.findPostByUrl(postUrl);
+        CommentDto commentDto = new CommentDto();
+        model.addAttribute("comment", commentDto);
         model.addAttribute("post", postDto);
         return "blog/blog_post";
     }
