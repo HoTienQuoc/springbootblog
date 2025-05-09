@@ -20,6 +20,11 @@ public class BlogController {
     public String viewBlogPosts(Model model) {
         List<PostDto> postsResponse = postService.findAllPosts();
         model.addAttribute("postsResponse", postsResponse);
-        return "view_posts";
+        return "blog/view_posts";
+    }
+
+    @GetMapping("/post")
+    private String showPost(Model model) {
+
     }
 }
