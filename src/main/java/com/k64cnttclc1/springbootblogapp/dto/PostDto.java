@@ -1,5 +1,6 @@
 package com.k64cnttclc1.springbootblogapp.dto;
 
+
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @Builder
@@ -19,8 +21,10 @@ public class PostDto {
     private String url;
     @NotEmpty(message = "Post content should not be empty")
     private String content;
-    @NotEmpty(message = "Post short description should not be empty")
+    @NotEmpty(message = "Post short description should be empty")
     private String shortDescription;
-    private LocalDateTime createOn;
-    private LocalDateTime updateOn;
+    private LocalDateTime createdOn;
+    private LocalDateTime updatedOn;
+    private Set<CommentDto> comments;
 }
+

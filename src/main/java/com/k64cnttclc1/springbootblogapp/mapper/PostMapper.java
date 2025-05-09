@@ -1,31 +1,39 @@
 package com.k64cnttclc1.springbootblogapp.mapper;
 
+
 import com.k64cnttclc1.springbootblogapp.dto.PostDto;
 import com.k64cnttclc1.springbootblogapp.entity.Post;
 
+import java.util.stream.Collectors;
+
 public class PostMapper {
-    public static PostDto mapToPostDto(Post post) {
-        return PostDto
-                .builder()
+
+    // map Post entity to PostDto
+    public static PostDto mapToPostDto(Post post){
+        return PostDto.builder()
                 .id(post.getId())
                 .title(post.getTitle())
                 .url(post.getUrl())
                 .content(post.getContent())
                 .shortDescription(post.getShortDescription())
-                .createOn(post.getCreateOn())
-                .updateOn(post.getUpdateOn())
+                .createdOn(post.getCreatedOn())
+                .updatedOn(post.getUpdatedOn())
+                .comments(post.getComments().stream()
+                        .map((comment) -> CommentMapper.mapToCommentDto(comment))
+                        .collect(Collectors.toSet()))
                 .build();
     }
-    public static Post mapToPost(PostDto postDto) {
-        return Post
-                .builder()
+
+    // map Postdto to Post entity
+    public static Post mapToPost(PostDto postDto){
+        return Post.builder()
                 .id(postDto.getId())
                 .title(postDto.getTitle())
-                .url(postDto.getUrl())
                 .content(postDto.getContent())
+                .url(postDto.getUrl())
                 .shortDescription(postDto.getShortDescription())
-                .createOn(postDto.getCreateOn())
-                .updateOn(postDto.getUpdateOn())
+                .createdOn(postDto.getCreatedOn())
+                .updatedOn(postDto.getUpdatedOn())
                 .build();
     }
 }

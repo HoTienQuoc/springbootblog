@@ -1,5 +1,6 @@
 package com.k64cnttclc1.springbootblogapp.controller;
 
+
 import com.k64cnttclc1.springbootblogapp.dto.CommentDto;
 import com.k64cnttclc1.springbootblogapp.dto.PostDto;
 import com.k64cnttclc1.springbootblogapp.service.PostService;
@@ -13,30 +14,38 @@ import java.util.List;
 
 @Controller
 public class BlogController {
+
     private PostService postService;
 
     public BlogController(PostService postService) {
         this.postService = postService;
     }
 
+    // handler method to handle http://localhost:8080/
     @GetMapping("/")
-    public String viewBlogPosts(Model model) {
+    public String viewBlogPosts(Model model){
         List<PostDto> postsResponse = postService.findAllPosts();
         model.addAttribute("postsResponse", postsResponse);
         return "blog/view_posts";
     }
 
+    // handler method to handle view post request
     @GetMapping("/post/{postUrl}")
-    private String showPost(@PathVariable("postUrl") String postUrl, Model model) {
-        PostDto postDto = postService.findPostByUrl(postUrl);
+    private String showPost(@PathVariable("postUrl") String postUrl,
+                            Model model){
+        PostDto post = postService.findPostByUrl(postUrl);
+
         CommentDto commentDto = new CommentDto();
+        model.addAttribute("post", post);
         model.addAttribute("comment", commentDto);
-        model.addAttribute("post", postDto);
         return "blog/blog_post";
     }
 
+    // handler method to handle blog post search request
+    // http://localhost:8080/page/search?query=java
     @GetMapping("/page/search")
-    public String searchPosts(@RequestParam (value="query") String query, Model model) {
+    public String searchPosts(@RequestParam(value = "query") String query,
+                              Model model){
         List<PostDto> postsResponse = postService.searchPosts(query);
         model.addAttribute("postsResponse", postsResponse);
         return "blog/view_posts";

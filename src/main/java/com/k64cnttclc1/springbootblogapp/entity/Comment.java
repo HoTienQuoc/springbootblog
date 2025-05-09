@@ -7,35 +7,30 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name="comments")
+@Table(name = "comments")
 public class Comment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(nullable = false)
     private String name;
-
     @Column(nullable = false)
     private String email;
-
     @Lob
     private String content;
-
     @CreationTimestamp
     private LocalDateTime createdOn;
-
     @UpdateTimestamp
     private LocalDateTime updatedOn;
 
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
-
 }
