@@ -1,15 +1,23 @@
 version: '3.8'
+
 services:
   mysql:
-    image: mysql:8
-    container_name: mysql
+    image: mysql:8.0
+    container_name: mysql_db_container
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: MysqL@123
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: myblogapp
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
+    networks:
+      - springboot-network
 
 volumes:
-  mysql_data:
+  mysql-data:
+
+networks:
+  springboot-network:
+    driver: bridge

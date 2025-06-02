@@ -54,7 +54,9 @@ public class WebSpringSecurity {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder builder) throws Exception {
-        builder.userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+        builder.inMemoryAuthentication()
+                .withUser("admin@gmail.com")
+                .password(passwordEncoder().encode("123456"))
+                .roles("ADMIN");
     }
 }
