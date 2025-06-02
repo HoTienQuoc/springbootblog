@@ -1,6 +1,5 @@
 package com.k64cnttclc1.springbootblogapp.config;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +17,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class WebSpringSecurity {
 
-    private UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService; // Đây sẽ là CustomUserDetailsService của bạn
 
+    // Constructor Injection cho UserDetailsService
     public WebSpringSecurity(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
@@ -36,15 +36,15 @@ public class WebSpringSecurity {
                         authorize.requestMatchers(new AntPathRequestMatcher("/resources/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/register/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/admin/**"))
-                                .hasAnyRole("ADMIN", "GUEST")
+                                .hasAnyRole("ADMIN", "GUEST") // Spring Security tự thêm tiền tố "ROLE_"
                                 .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/post/**")).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin( form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/admin/posts")
-                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/admin/posts") // URL sau khi đăng nhập thành công
+                        .loginProcessingUrl("/login")      // URL xử lý thông tin đăng nhập (phải khớp với action của form)
                         .permitAll()
                 ).logout( logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                         .permitAll()
@@ -52,11 +52,13 @@ public class WebSpringSecurity {
         return http.build();
     }
 
+    // PHẦN SỬA ĐỔI QUAN TRỌNG Ở ĐÂY:
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder builder) throws Exception {
-        builder.inMemoryAuthentication()
-                .withUser("admin@gmail.com")
-                .password(passwordEncoder().encode("123456"))
-                .roles("ADMIN");
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        // Cấu hình AuthenticationManagerBuilder để sử dụng UserDetailsService của bạn
+        // và PasswordEncoder để xác thực người dùng từ cơ sở dữ liệu.
+        auth
+                .userDetailsService(userDetailsService)  // Sử dụng CustomUserDetailsService để tải thông tin người dùng
+                .passwordEncoder(passwordEncoder());     // Sử dụng BCryptPasswordEncoder để so sánh mật khẩu
     }
 }
