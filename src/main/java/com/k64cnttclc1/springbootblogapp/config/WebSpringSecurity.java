@@ -33,13 +33,14 @@ public class WebSpringSecurity {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers(new AntPathRequestMatcher("/resources/**")).permitAll()
-                                .requestMatchers(new AntPathRequestMatcher("/register/**")).permitAll()
-                                .requestMatchers(new AntPathRequestMatcher("/admin/**"))
-                                .hasAnyRole("ADMIN", "GUEST") // Spring Security tự thêm tiền tố "ROLE_"
-                                .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
-                                .requestMatchers(new AntPathRequestMatcher("/post/**")).permitAll()
-                                .anyRequest().authenticated()
+                    authorize.requestMatchers(new AntPathRequestMatcher("/resources/**")).permitAll()
+                            .requestMatchers(new AntPathRequestMatcher("/register/**")).permitAll()
+                            .requestMatchers(new AntPathRequestMatcher("/admin/**"))
+                            .hasAnyRole("ADMIN", "GUEST") // Yêu cầu ROLE_ADMIN hoặc ROLE_GUEST
+                            .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
+                            .requestMatchers(new AntPathRequestMatcher("/post/**")).permitAll()
+                            .anyRequest().authenticated()
+
                 )
                 .formLogin( form -> form
                         .loginPage("/login")
